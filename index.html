@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spelling Bee La Ngoo</title>
+    <style>
+        /* Existing styles */
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-image: url('background.jpg'); /* Add a fantasy background image */
+            background-size: cover;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .stickman {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: jump 0.5s ease-in-out infinite;
+        }
+        @keyframes jump {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .hidden-text {
+            color: red;
+            font-size: 3em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 1em;
+            margin: 5px;
+            border: none;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        input[type="text"] {
+            padding: 12px;
+            font-size: 1.1em;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .result {
+            font-size: 1.5em;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .translation, .definition {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: #ffdd57;
+        }
+        .progress, .score, .hearts {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        .info-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .animation-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .heart {
+            font-size: 1.5em;
+            color: red;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="stickman">Spelling Bee La Ngoo</div>
+        <div class="progress" id="progress">Press "Start Game" then press "Hear the Word" to start the game</div>
+        <div class="hearts" id="hearts"></div> <!-- Hearts display -->
+        <div id="wordContainer">
+            <div class="hidden-text" id="hiddenText">Hidden</div>
+        </div>
+        <div class="score" id="score">Score: 0</div>
+        <div class="button-container">
+            <button onclick="startGame()">Start Game</button>
+            <button onclick="speakWord()" id="hearWordButton" style="display:none;">Hear the Word</button>
+            <input type="text" id="wordInput" placeholder="Type the word here">
+            <button onclick="checkWord()">Submit Answer</button>
+            <button onclick="giveUp()">Give Up</button>
+            <button onclick="nextWord()" id="nextWordButton" style="display:none;">Next Word</button>
+        </div>
+        <div class="info-container">
+            <div class="translation" id="translation" style="display:none;"></div>
+            <div class="definition" id="definition" style="display:none;"></div>
+            <button onclick="showTranslation()">Show Translation</button>
+            <button onclick="showDefinition()">Show Definition</button>
+        </div>
+        <div class="result" id="result"></div>
+        <div class="animation-container">
+            <!-- Optional: Add animation or decoration here -->
+        </div>
+        <div class="made-by">Made by sippawith</div>
+    </div>
+    <script src="script.js"></script>
+    
+</body>
+</html>
