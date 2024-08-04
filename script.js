@@ -161,7 +161,7 @@ function startGame() {
     document.getElementById('result').textContent = '';
     document.getElementById('translation').style.display = 'none';
     document.getElementById('definition').style.display = 'none';
-    document.getElementById('progress').textContent = 'Press "Hear the Word" to hear the word';
+    document.getElementById('progress').textContent = 'Press "Hear the Word" to hear them';
     document.getElementById('hiddenText').textContent = 'Hidden';
     document.getElementById('hiddenText').style.color = 'red';
     document.getElementById('wordInput').value = '';
