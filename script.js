@@ -1,259 +1,170 @@
-const words = [
-    "Blame", "Resemble", "Fest", "Bribe", "Colleague", "Vehicle", "Situation",
-    "Urgent", "Identity", "Client", "Curious", "Unique", "Schedule", "Mitigate",
-    "Failure", "Potential", "Available", "Injured", "Parcel", "Persuade", 
-    "Authority", "Irrelevant", "Exaggerate", "Pamphlet", "Obedient", "Trespassing", 
-    "Subsequent", "Diabetes", "Appreciate", "Punctual", "Doubt", "Caution", 
-    "Service", "Caviar", "Purchase", "Conscious", "Excellent", "Equipment", 
-    "Language", "Refund", "Release", "Refuse", "Prioritize", "Negotiate", 
-    "Recruit", "Profitability", "Authorize", "Entrepreneur", "Quantitative", 
-    "Qualitative", "Ethics", "Equity", "Franchise", "Liability", "Strategy", 
-    "Patent", "Revenue", "Tariff", "Viability", "Niche", "Stakeholder", 
-    "Outsourcing", "Depreciation", "Benchmark", "Compliance"
-];
-
-const translations = {
-    "Blame": "ตำหนิ",
-    "Resemble": "คล้ายคลึง",
-    "Fest": "เทศกาล",
-    "Bribe": "สินบน",
-    "Colleague": "เพื่อนร่วมงาน",
-    "Vehicle": "ยานพาหนะ",
-    "Situation": "สถานการณ์",
-    "Urgent": "เร่งด่วน",
-    "Identity": "อัตลักษณ์",
-    "Client": "ลูกค้า",
-    "Curious": "อยากรู้อยากเห็น",
-    "Unique": "เอกลักษณ์",
-    "Schedule": "ตารางเวลา",
-    "Mitigate": "บรรเทา",
-    "Failure": "ความล้มเหลว",
-    "Potential": "ศักยภาพ",
-    "Available": "ใช้ได้",
-    "Injured": "บาดเจ็บ",
-    "Parcel": "พัสดุ",
-    "Persuade": "ชักชวน",
-    "Authority": "อำนาจ",
-    "Irrelevant": "ไม่เกี่ยวข้อง",
-    "Exaggerate": "พูดเกินจริง",
-    "Pamphlet": "แผ่นพับ",
-    "Obedient": "เชื่อฟัง",
-    "Trespassing": "บุกรุก",
-    "Subsequent": "ภายหลัง",
-    "Diabetes": "โรคเบาหวาน",
-    "Appreciate": "ขอบคุณ",
-    "Punctual": "ตรงต่อเวลา",
-    "Doubt": "สงสัย",
-    "Caution": "ความระมัดระวัง",
-    "Service": "บริการ",
-    "Caviar": "ไข่ปลาคาเวียร์",
-    "Purchase": "ซื้อ",
-    "Conscious": "มีสติ",
-    "Excellent": "ดีเลิศ",
-    "Equipment": "อุปกรณ์",
-    "Language": "ภาษา",
-    "Refund": "คืนเงิน",
-    "Release": "ปล่อย",
-    "Refuse": "ปฏิเสธ",
-    "Prioritize": "ให้ความสำคัญ",
-    "Negotiate": "เจรจา",
-    "Recruit": "สรรหา",
-    "Profitability": "ความสามารถในการทำกำไร",
-    "Authorize": "อนุมัติ",
-    "Entrepreneur": "ผู้ประกอบการ",
-    "Quantitative": "เชิงปริมาณ",
-    "Qualitative": "เชิงคุณภาพ",
-    "Ethics": "จริยธรรม",
-    "Equity": "ความเสมอภาค",
-    "Franchise": "แฟรนไชส์",
-    "Liability": "หนี้สิน",
-    "Strategy": "กลยุทธ์",
-    "Patent": "สิทธิบัตร",
-    "Revenue": "รายได้",
-    "Tariff": "ภาษีศุลกากร",
-    "Viability": "ความสามารถในการดำรงชีวิต",
-    "Niche": "ส่วนตลาด",
-    "Stakeholder": "ผู้มีส่วนได้ส่วนเสีย",
-    "Outsourcing": "การจ้างงานภายนอก",
-    "Depreciation": "ค่าลดลง",
-    "Benchmark": "มาตรฐานเปรียบเทียบ",
-    "Compliance": "การปฏิบัติตาม"
-};
-
-const definitions = {
-    "Blame": "Assign responsibility for a fault or wrong",
-    "Resemble": "Have qualities or features, especially those of appearance, in common with (someone or something); look or seem like",
-    "Fest": "A festival or celebration",
-    "Bribe": "Persuade (someone) to act in one's favor, typically illegally or dishonestly, by a gift of money or other inducement",
-    "Colleague": "A person with whom one works, especially in a profession or business",
-    "Vehicle": "A thing used for transporting people or goods, especially on land, such as a car, truck, or cart",
-    "Situation": "A set of circumstances in which one finds oneself; a state of affairs",
-    "Urgent": "Requiring immediate action or attention",
-    "Identity": "The fact of being who or what a person or thing is",
-    "Client": "A person or organization using the services of a lawyer or other professional person or company",
-    "Curious": "Eager to know or learn something",
-    "Unique": "Being the only one of its kind; unlike anything else",
-    "Schedule": "A plan for carrying out a process or procedure, giving lists of intended events and times",
-    "Mitigate": "Make less severe, serious, or painful",
-    "Failure": "Lack of success",
-    "Potential": "Having or showing the capacity to become or develop into something in the future",
-    "Available": "Able to be used or obtained; at someone's disposal",
-    "Injured": "Harmed, damaged, or impaired",
-    "Parcel": "A package",
-    "Persuade": "Cause (someone) to do something through reasoning or argument",
-    "Authority": "The power or right to give orders, make decisions, and enforce obedience",
-    "Irrelevant": "Not connected with or relevant to something",
-    "Exaggerate": "Represent (something) as being larger, better, or worse than it really is",
-    "Pamphlet": "A small booklet or leaflet containing information or arguments about a single subject",
-    "Obedient": "Complying or willing to comply with orders or requests; submissive to another's will",
-    "Trespassing": "Enter the owner's land or property without permission",
-    "Subsequent": "Coming after something in time; following",
-    "Diabetes": "A disease in which the body's ability to produce or respond to the hormone insulin is impaired",
-    "Appreciate": "Recognize the full worth of",
-    "Punctual": "Happening or doing something at the agreed or proper time",
-    "Doubt": "A feeling of uncertainty or lack of conviction",
-    "Caution": "Care taken to avoid danger or mistakes",
-    "Service": "The action of helping or doing work for someone",
-    "Caviar": "The pickled roe of sturgeon or other large fish, eaten as a delicacy",
-    "Purchase": "Acquire (something) by paying for it; buy",
-    "Conscious": "Aware of and responding to one's surroundings",
-    "Excellent": "Extremely good; outstanding",
-    "Equipment": "The necessary items for a particular purpose",
-    "Language": "The method of human communication, either spoken or written, consisting of the use of words in a structured and conventional way",
-    "Refund": "Pay back (money), typically to a customer who is not satisfied with goods or services bought",
-    "Release": "Allow or enable to escape from confinement; set free",
-    "Refuse": "Indicate or show that one is not willing to do something",
-    "Prioritize": "Designate or treat (something) as more important than other things",
-    "Negotiate": "Obtain or bring about by discussion",
-    "Recruit": "Enlist (someone) in the armed forces",
-    "Profitability": "The degree to which a business or activity yields profit or financial gain",
-    "Authorize": "Give official permission for or approval to (an undertaking or agent)",
-    "Entrepreneur": "A person who organizes and operates a business or businesses, taking on greater than normal financial risks in order to do so",
-    "Quantitative": "Relating to, measuring, or measured by the quantity of something rather than its quality",
-    "Qualitative": "Relating to, measuring, or measured by the quality of something rather than its quantity",
-    "Ethics": "Moral principles that govern a person's behavior or the conducting of an activity",
-    "Equity": "The quality of being fair and impartial",
-    "Franchise": "An authorization granted by a government or company to an individual or group enabling them to carry out specified commercial activities",
-    "Liability": "The state of being responsible for something, especially by law",
-    "Strategy": "A plan of action or policy designed to achieve a major or overall aim",
-    "Patent": "A government authority or license conferring a right or title for a set period, especially the sole right to exclude others from making, using, or selling an invention",
-    "Revenue": "Income, especially when of a company or organization and of a substantial nature",
-    "Tariff": "A tax or duty to be paid on a particular class of imports or exports",
-    "Viability": "Ability to work successfully",
-    "Niche": "A comfortable or suitable position in life or employment",
-    "Stakeholder": "A person with an interest or concern in something, especially a business",
-    "Outsourcing": "Obtain (goods or a service) from an outside or foreign supplier, especially in place of an internal source",
-    "Depreciation": "A reduction in the value of an asset over time, in particular",
-    "Benchmark": "A standard or point of reference against which things may be compared or assessed",
-    "Compliance": "The action or fact of complying with a wish or command"
-};
-
-let currentWordIndex = -1;
-let score = 0;
-let hearts = 3; // Default number of hearts
-
-function startGame() {
-    // Ask user for number of hearts
-    const userHearts = parseInt(prompt('How many hearts do you want to start with?', '3'), 10);
-
-    // Validate user input
-    if (isNaN(userHearts) || userHearts < 1 || userHearts > 9999999999999999999999999999999999999999999999999999999999999) {
-        alert('Invalid number of hearts. Setting to default (3).');
-        hearts = 3;
-    } else {
-        hearts = userHearts;
-    }
-
-    // Initialize game
-    document.getElementById('hiddenText').style.display = 'block';
-    document.getElementById('hearWordButton').style.display = 'block';
-    document.getElementById('wordInput').style.display = 'block';
-    document.getElementById('result').textContent = '';
-    document.getElementById('translation').style.display = 'none';
-    document.getElementById('definition').style.display = 'none';
-    document.getElementById('nextWordButton').style.display = 'none';
-    document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
-    nextWord();
-}
-
-function speakWord() {
-    if (currentWordIndex >= 0) {
-        let word = words[currentWordIndex];
-        let utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = 'en-US';
-        speechSynthesis.speak(utterance);
-    }
-}
-
-function checkWord() {
-    const userWord = document.getElementById('wordInput').value.trim();
-    const correctWord = words[currentWordIndex];
-    if (userWord.toLowerCase() === correctWord.toLowerCase()) {
-        document.getElementById('result').textContent = 'Correct!';
-        document.getElementById('result').style.color = 'green';
-        score++;
-        document.getElementById('score').textContent = 'Score: ' + score;
-        document.getElementById('nextWordButton').style.display = 'block';
-    } else {
-        document.getElementById('result').textContent = 'Incorrect! The correct word is ' + correctWord;
-        document.getElementById('result').style.color = 'red';
-        hearts--;
-        if (hearts > 0) {
-            document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
-            document.getElementById('nextWordButton').style.display = 'block';
-        } else {
-            document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
-            document.getElementById('result').textContent = 'Game Over! Final Score: ' + score;
-            document.getElementById('result').style.color = 'red';
-            document.getElementById('hiddenText').style.display = 'none';
-            document.getElementById('hearWordButton').style.display = 'none';
-            document.getElementById('wordInput').style.display = 'none';
-            document.getElementById('nextWordButton').style.display = 'none';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spelling Bee hehehe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
         }
-    }
-}
-        
-function nextWord() {
-    currentWordIndex = Math.floor(Math.random() * words.length);
-    document.getElementById('hiddenText').textContent = 'Hidden'; // Hide the word
-    document.getElementById('wordInput').value = ''; // Clear the input field
-    document.getElementById('nextWordButton').style.display = 'none';
-    document.getElementById('translation').style.display = 'none';
-    document.getElementById('definition').style.display = 'none';
-    document.getElementById('result').textContent = '';
-    speakWord(); // Optionally, speak the word
-}
-
-function giveUp() {
-    const correctWord = words[currentWordIndex];
-    document.getElementById('result').textContent = 'The correct word was: ' + correctWord;
-    document.getElementById('result').style.color = 'red';
-    hearts--;
-    document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
-    if (hearts <= 0) {
-        document.getElementById('result').textContent = 'Game Over! Final Score: ' + score;
-        document.getElementById('result').style.color = 'red';
-        document.getElementById('hiddenText').style.display = 'none';
-        document.getElementById('hearWordButton').style.display = 'none';
-        document.getElementById('wordInput').style.display = 'none';
-        document.getElementById('nextWordButton').style.display = 'none';
-    } else {
-        nextWord(); // Move to next word after giving up
-    }
-}
-
-function showTranslation() {
-    const translation = translations[words[currentWordIndex]];
-    if (translation) {
-        document.getElementById('translation').textContent = translation;
-        document.getElementById('translation').style.display = 'block';
-    }
-}
-
-function showDefinition() {
-    const definition = definitions[words[currentWordIndex]];
-    if (definition) {
-        document.getElementById('definition').textContent = definition;
-        document.getElementById('definition').style.display = 'block';
-    }
-}
+        .container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            max-width: 800px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .stickman {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            animation: jump 0.5s ease-in-out infinite;
+        }
+        @keyframes jump {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .hidden-text {
+            color: #ff4757;
+            font-size: 2.5em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            min-width: 150px;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        input[type="text"] {
+            padding: 12px;
+            font-size: 1.1em;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .result {
+            font-size: 1.5em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .translation, .definition {
+            font-size: 1.1em;
+            margin: 10px 0;
+            color: #ffdd57;
+            font-family: 'Noto Sans Thai Looped', sans-serif;
+        }
+        .progress, .score, .hearts {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        .info-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .animation-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .heart {
+            font-size: 1.5em;
+            color: #ff4757;
+            margin: 0 5px;
+        }
+        .made-by {
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        @media (max-width: 600px) {
+            .stickman {
+                font-size: 2.5em;
+            }
+            .hidden-text {
+                font-size: 1.8em;
+            }
+            button {
+                font-size: 1em;
+                padding: 10px 20px;
+            }
+            input[type="text"] {
+                font-size: 1em;
+            }
+            .result, .translation, .definition, .progress, .score, .hearts {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="stickman">Spelling Bee hehehe</div>
+        <div class="progress" id="progress">Press "Start Game" then press "Hear the Word" to start the game</div>
+        <div class="hearts" id="hearts"></div>
+        <div id="wordContainer">
+            <div class="hidden-text" id="hiddenText">Hidden</div>
+        </div>
+        <div class="score" id="score">Score: 0</div>
+        <div class="button-container">
+            <button onclick="startGame()">Start Game</button>
+            <button onclick="speakWord()" id="hearWordButton" style="display:none;">Hear the Word</button>
+            <input type="text" id="wordInput" placeholder="Type the word here">
+            <button onclick="checkWord()">Submit Answer</button>
+            <button onclick="nextWord()" id="nextWordButton" style="display:none;">Next Word</button>
+        </div>
+        <div class="info-container">
+            <div class="translation" id="translation" style="display:none;"></div>
+            <div class="definition" id="definition" style="display:none;"></div>
+            <button onclick="showTranslation()">Show Translation</button>
+            <button onclick="showDefinition()">Show Definition</button>
+        </div>
+        <div class="result" id="result"></div>
+        <div class="animation-container">
+            <!-- Optional: Add animation or decoration here -->
+        </div>
+        <div class="made-by">Made by sippawith</div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
