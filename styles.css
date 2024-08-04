@@ -1,6 +1,7 @@
 body {
     font-family: 'Outfit', sans-serif;
-    background-image: url('background.jpg');
+    background: rgb(195,61,155);
+    background: linear-gradient(90deg, rgba(195,61,155,1) 28%, rgba(103,135,232,1) 67%, rgba(0,255,125,1) 100%);
     background-size: cover;
     background-position: center;
     color: #fff;
