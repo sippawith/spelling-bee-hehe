@@ -33,7 +33,7 @@ const translations = {
     "Injured": "บาดเจ็บ",
     "Parcel": "พัสดุ",
     "Persuade": "ชักชวน",
-        "Authority": "อำนาจ",
+    "Authority": "อำนาจ",
     "Irrelevant": "ไม่เกี่ยวข้อง",
     "Exaggerate": "พูดเกินจริง",
     "Pamphlet": "แผ่นพับ",
@@ -157,17 +157,12 @@ function startGame() {
     const userHearts = parseInt(prompt('How many hearts do you want to start with?', '3'), 10);
 
     // Validate user input
-    if (isNaN(userHearts) || userHearts < 1 || userHearts > Number.MAX_SAFE_INTEGER) {
+    if (isNaN(userHearts) || userHearts < 1 || userHearts > 9999999999999999999999999999999999999999999999999999999999999) {
         alert('Invalid number of hearts. Setting to default (3).');
         hearts = 3;
     } else {
         hearts = userHearts;
     }
-
-    // Reset game state
-    score = 0; // Reset score
-    currentWordIndex = -1; // Reset current word index
-    hearts = userHearts; // Update hearts with user input
 
     // Initialize game
     document.getElementById('hiddenText').style.display = 'block';
@@ -177,79 +172,42 @@ function startGame() {
     document.getElementById('translation').style.display = 'none';
     document.getElementById('definition').style.display = 'none';
     document.getElementById('nextWordButton').style.display = 'none';
-    document.getElementById('hearts').textContent = `Hearts: ${hearts}`;
-    document.getElementById('score').textContent = `Score: ${score}`;
-
-    // Load the first word
+    document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
     nextWord();
 }
 
-function nextWord() {
-    currentWordIndex = Math.floor(Math.random() * words.length);
-    const word = words[currentWordIndex];
-    
-    // Update hidden text
-    document.getElementById('hiddenText').textContent = 'Hidden';
-
-    // Update UI
-    document.getElementById('wordInput').value = '';
-    document.getElementById('result').textContent = '';
-    document.getElementById('translation').textContent = translations[word] || 'No translation available';
-    document.getElementById('definition').textContent = definitions[word] || 'No definition available';
-    document.getElementById('translation').style.display = 'none';
-    document.getElementById('definition').style.display = 'none';
-    document.getElementById('nextWordButton').style.display = 'none';
-}
-
-function hearWord() {
-    if (currentWordIndex === -1) return;
-    const word = words[currentWordIndex];
-    const utterance = new SpeechSynthesisUtterance(word);
-    speechSynthesis.speak(utterance);
-}
-
-function checkWord() {
-    if (currentWordIndex === -1) return;
-    const word = words[currentWordIndex];
-    const userInput = document.getElementById('wordInput').value.trim();
-    
-    if (userInput.toLowerCase() === word.toLowerCase()) {
-        document.getElementById('result').textContent = 'Correct';
-        score += 10;
-        document.getElementById('score').textContent = `Score: ${score}`;
-        setTimeout(nextWord, 1000);
-    } else {
-        hearts -= 1;
-        document.getElementById('hearts').textContent = `Hearts: ${hearts}`;
-        if (hearts <= 0) {
-            alert('Game over! No hearts left.');
-            endGame();
-        } else {
-            document.getElementById('result').textContent = 'Incorrect';
-            document.getElementById('nextWordButton').style.display = 'block';
-        }
+function speakWord() {
+    if (currentWordIndex >= 0) {
+        let word = words[currentWordIndex];
+        let utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US';
+        speechSynthesis.speak(utterance);
     }
 }
 
-function nextWordAfterIncorrect() {
-    document.getElementById('hiddenText').textContent = words[currentWordIndex];
-    document.getElementById('translation').style.display = 'block';
-    document.getElementById('definition').style.display = 'block';
-    document.getElementById('nextWordButton').style.display = 'none';
-}
-
-function endGame() {
-    // Hide all game elements and show the end game message
-    document.getElementById('hiddenText').style.display = 'none';
-    document.getElementById('hearWordButton').style.display = 'none';
-    document.getElementById('wordInput').style.display = 'none';
-    document.getElementById('translation').style.display = 'none';
-    document.getElementById('definition').style.display = 'none';
-    document.getElementById('nextWordButton').style.display = 'none';
-    alert(`Game over! Your final score is ${score}.`);
-}
-
-document.getElementById('startButton').addEventListener('click', startGame);
-document.getElementById('hearWordButton').addEventListener('click', hearWord);
-document.getElementById('checkButton').addEventListener('click', checkWord);
-document.getElementById('nextWordButton').addEventListener('click', nextWordAfterIncorrect);
+function checkWord() {
+    const userWord = document.getElementById('wordInput').value.trim();
+    const correctWord = words[currentWordIndex];
+    if (userWord.toLowerCase() === correctWord.toLowerCase()) {
+        document.getElementById('result').textContent = 'Correct!';
+        document.getElementById('result').style.color = 'green';
+        score++;
+        document.getElementById('score').textContent = 'Score: ' + score;
+        document.getElementById('nextWordButton').style.display = 'block';
+    } else {
+        document.getElementById('result').textContent = 'Incorrect! The correct word is ' + correctWord;
+        document.getElementById('result').style.color = 'red';
+        hearts--;
+        if (hearts > 0) {
+            document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
+            document.getElementById('nextWordButton').style.display = 'block';
+        } else {
+            document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
+            document.getElementById('result').textContent = 'Game Over! Final Score: ' + score;
+            document.getElementById('result').style.color = 'red';
+            document.getElementById('hiddenText').style.display = 'none';
+            document.getElementById('hearWordButton').style.display = 'none';
+            document.getElementById('wordInput').style.display = 'none';
+            document.getElementById('nextWordButton').style.display = 'none';
+        }
+        
