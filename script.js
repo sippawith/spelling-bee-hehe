@@ -148,112 +148,130 @@ const definitions = {
     "Compliance": "The action or fact of complying with a wish or command"
 };
 
-let currentWordIndex = -1;
+let currentWordIndex = 0;
+let currentWord = words[currentWordIndex];
 let score = 0;
-let hearts = 3; // Default number of hearts
+let hearts = 3;
 
-function startGame() {
-    // Ask user for number of hearts
-    const userHearts = parseInt(prompt('How many hearts do you want to start with?', '3'), 10);
+const wordElement = document.getElementById('word');
+const inputElement = document.getElementById('input');
+const resultElement = document.getElementById('result');
+const nextButton = document.getElementById('next');
+const scoreElement = document.getElementById('score');
+const heartsElement = document.getElementById('hearts');
+const definitionElement = document.getElementById('definition');
+const translationElement = document.getElementById('translation');
 
-    // Validate user input
-    if (isNaN(userHearts) || userHearts < 1 || userHearts > 9999999999999999999999999999999999999999999999999999999999999) {
-        alert('Invalid number of hearts. Setting to default (3).');
-        hearts = 3;
-    } else {
-        hearts = userHearts;
-    }
+function updateScore() {
+    scoreElement.textContent = `Score: ${score}`;
+}
 
-    // Initialize game
-    document.getElementById('hiddenText').style.display = 'block';
-    document.getElementById('hearWordButton').style.display = 'block';
-    document.getElementById('wordInput').style.display = 'block';
-    document.getElementById('result').textContent = '';
-    document.getElementById('translation').style.display = 'none';
-    document.getElementById('definition').style.display = 'none';
-    document.getElementById('nextWordButton').style.display = 'none';
-    document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
+function updateHearts() {
+    heartsElement.textContent = `Hearts: ${hearts}`;
+}
+
+function resetGame() {
+    currentWordIndex = 0;
+    currentWord = words[currentWordIndex];
+    score = 0;
+    hearts = 3;
+    updateScore();
+    updateHearts();
     nextWord();
 }
 
+function nextWord() {
+    currentWord = words[currentWordIndex];
+    wordElement.textContent = 'Hidden';
+    inputElement.value = '';
+    resultElement.textContent = '';
+    definitionElement.textContent = '';
+    translationElement.textContent = '';
+}
+
 function speakWord() {
-    if (currentWordIndex >= 0) {
-        let word = words[currentWordIndex];
-        let utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = 'en-US';
-        speechSynthesis.speak(utterance);
-    }
+    const msg = new SpeechSynthesisUtterance(currentWord);
+    window.speechSynthesis.speak(msg);
 }
 
 function checkWord() {
-    const userWord = document.getElementById('wordInput').value.trim();
-    const correctWord = words[currentWordIndex];
-    if (userWord.toLowerCase() === correctWord.toLowerCase()) {
-        document.getElementById('result').textContent = 'Correct!';
-        document.getElementById('result').style.color = 'green';
-        score++;
-        document.getElementById('score').textContent = 'Score: ' + score;
-        document.getElementById('nextWordButton').style.display = 'block';
-    } else {
-        document.getElementById('result').textContent = 'Incorrect! The correct word is ' + correctWord;
-        document.getElementById('result').style.color = 'red';
-        hearts--;
-        if (hearts > 0) {
-            document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
-            document.getElementById('nextWordButton').style.display = 'block';
+    const userWord = inputElement.value.trim();
+    if (userWord.toLowerCase() === currentWord.toLowerCase()) {
+        resultElement.textContent = 'Correct!';
+        resultElement.style.color = 'green';
+        score += 1;
+        updateScore();
+        currentWordIndex += 1;
+        if (currentWordIndex < words.length) {
+            nextWord();
         } else {
-            document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
-            document.getElementById('result').textContent = 'Game Over! Final Score: ' + score;
-            document.getElementById('result').style.color = 'red';
-            document.getElementById('hiddenText').style.display = 'none';
-            document.getElementById('hearWordButton').style.display = 'none';
-            document.getElementById('wordInput').style.display = 'none';
-            document.getElementById('nextWordButton').style.display = 'none';
+            resultElement.textContent = 'Congratulations! You have completed all the words!';
+        }
+    } else {
+        resultElement.textContent = `Incorrect! The correct word was ${currentWord}`;
+        resultElement.style.color = 'red';
+        hearts -= 1;
+        updateHearts();
+        if (hearts <= 0) {
+            resultElement.textContent = 'Game Over!';
+        } else {
+            currentWordIndex += 1;
+            if (currentWordIndex < words.length) {
+                nextWord();
+            } else {
+                resultElement.textContent = 'Game Over!';
+            }
         }
     }
 }
-        
-function nextWord() {
-    currentWordIndex = Math.floor(Math.random() * words.length);
-    document.getElementById('hiddenText').textContent = 'Hidden'; // Hide the word
-    document.getElementById('wordInput').value = ''; // Clear the input field
-    document.getElementById('nextWordButton').style.display = 'none';
-    document.getElementById('translation').style.display = 'none';
-    document.getElementById('definition').style.display = 'none';
-    document.getElementById('result').textContent = '';
-    speakWord(); // Optionally, speak the word
-}
 
 function giveUp() {
-    const correctWord = words[currentWordIndex];
-    document.getElementById('result').textContent = 'The correct word was: ' + correctWord;
-    document.getElementById('result').style.color = 'red';
-    hearts--;
-    document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
+    resultElement.textContent = `The correct word was ${currentWord}`;
+    resultElement.style.color = 'red';
+    hearts -= 1;
+    updateHearts();
     if (hearts <= 0) {
-        document.getElementById('result').textContent = 'Game Over! Final Score: ' + score;
-        document.getElementById('result').style.color = 'red';
-        document.getElementById('hiddenText').style.display = 'none';
-        document.getElementById('hearWordButton').style.display = 'none';
-        document.getElementById('wordInput').style.display = 'none';
-        document.getElementById('nextWordButton').style.display = 'none';
+        resultElement.textContent = 'Game Over!';
     } else {
-        nextWord(); // Move to next word after giving up
-    }
-}
-
-function showTranslation() {
-    const translation = translations[words[currentWordIndex]];
-    if (translation) {
-        document.getElementById('translation').textContent = translation;
-        document.getElementById('translation').style.display = 'block';
+        currentWordIndex += 1;
+        if (currentWordIndex < words.length) {
+            nextWord();
+        } else {
+            resultElement.textContent = 'Game Over!';
+        }
     }
 }
 
 function showDefinition() {
-    const definition = definitions[words[currentWordIndex]];
-    if (definition) {
-        document.getElementById('definition').textContent = definition;
-        document.getElementById('definition').style.display = 'block';
-    }
+    definitionElement.textContent = definitions[currentWord] || 'No definition available';
 }
+
+function showTranslation() {
+    translationElement.textContent = translations[currentWord] || 'No translation available';
+}
+
+document.getElementById('hear').addEventListener('click', speakWord);
+document.getElementById('check').addEventListener('click', checkWord);
+document.getElementById('give-up').addEventListener('click', giveUp);
+document.getElementById('show-definition').addEventListener('click', showDefinition);
+document.getElementById('show-translation').addEventListener('click', showTranslation);
+document.getElementById('reset').addEventListener('click', resetGame);
+
+function initializeGame() {
+    resetGame();
+}
+
+// Start the game when the page loads
+window.onload = initializeGame;
+
+nextButton.addEventListener('click', () => {
+    if (currentWordIndex < words.length) {
+        nextWord();
+    } else {
+        resultElement.textContent = 'You have finished all the words!';
+    }
+});
+
+// Display the initial score and hearts
+updateScore();
+updateHearts();
