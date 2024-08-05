@@ -116,7 +116,7 @@ input[type="text"] {
 
 .heart {
     font-size: 1.2rem;
-    color: #ff4757;
+    color: #000000;
     margin: 0 4px;
 }
 
@@ -142,4 +142,26 @@ input[type="text"] {
     .result, .translation, .definition, .progress, .score, .hearts {
         font-size: 1rem;
     }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 4px solid rgb(255, 255, 255);
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #000000;
+}
+
+.mistake-row {
+    color: #000000; /* Change this color code to your desired color */
 }
