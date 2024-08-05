@@ -148,16 +148,18 @@ const definitions = {
     "Compliance": "The action or fact of complying with a wish or command"
 };
 
+
 let currentWordIndex = -1;
 let score = 0;
 let hearts = 3; // Default number of hearts
+let mistakes = []; // Array to store mistakes
 
 function startGame() {
     // Ask user for number of hearts
     const userHearts = parseInt(prompt('How many hearts do you want to start with?', '3'), 10);
 
     // Validate user input
-    if (isNaN(userHearts) || userHearts < 1 || userHearts > 9999999999999999999999999999999999999999999999999999999999999) {
+    if (isNaN(userHearts) || userHearts < 1 || userHearts > Number.MAX_SAFE_INTEGER) {
         alert('Invalid number of hearts. Setting to default (3).');
         hearts = 3;
     } else {
@@ -173,6 +175,7 @@ function startGame() {
     document.getElementById('definition').style.display = 'none';
     document.getElementById('nextWordButton').style.display = 'none';
     document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
+    mistakes = []; // Reset mistakes
     nextWord();
 }
 
@@ -198,17 +201,13 @@ function checkWord() {
         document.getElementById('result').textContent = 'Incorrect! The correct word is ' + correctWord;
         document.getElementById('result').style.color = 'red';
         hearts--;
+        mistakes.push({ typed: userWord, correct: correctWord }); // Record mistake
         if (hearts > 0) {
             document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
             document.getElementById('nextWordButton').style.display = 'block';
         } else {
             document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
-            document.getElementById('result').textContent = 'Game Over! Final Score: ' + score;
-            document.getElementById('result').style.color = 'red';
-            document.getElementById('hiddenText').style.display = 'none';
-            document.getElementById('hearWordButton').style.display = 'none';
-            document.getElementById('wordInput').style.display = 'none';
-            document.getElementById('nextWordButton').style.display = 'none';
+            endGame();
         }
     }
 }
@@ -229,31 +228,43 @@ function giveUp() {
     document.getElementById('result').textContent = 'The correct word was: ' + correctWord;
     document.getElementById('result').style.color = 'red';
     hearts--;
+    mistakes.push({ typed: '', correct: correctWord }); // Record mistake
     document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
     if (hearts <= 0) {
-        document.getElementById('result').textContent = 'Game Over! Final Score: ' + score;
-        document.getElementById('result').style.color = 'red';
-        document.getElementById('hiddenText').style.display = 'none';
-        document.getElementById('hearWordButton').style.display = 'none';
-        document.getElementById('wordInput').style.display = 'none';
-        document.getElementById('nextWordButton').style.display = 'none';
+        endGame();
     } else {
         nextWord(); // Move to next word after giving up
     }
 }
 
+function endGame() {
+    document.getElementById('result').textContent = 'Game Over! Final Score: ' + score;
+    document.getElementById('result').style.color = 'red';
+    document.getElementById('hiddenText').style.display = 'none';
+    document.getElementById('hearWordButton').style.display = 'none';
+    document.getElementById('wordInput').style.display = 'none';
+    document.getElementById('nextWordButton').style.display = 'none';
+    displayMistakes(); // Show the mistakes table
+}
+
+function displayMistakes() {
+    let mistakesTable = '<h3>Mistakes:</h3><table border="1"><tr><th>Typed</th><th>Correct</th></tr>';
+    mistakes.forEach(mistake => {
+        mistakesTable += `<tr><td>${mistake.typed}</td><td>${mistake.correct}</td></tr>`;
+    });
+    mistakesTable += '</table>';
+    document.getElementById('result').innerHTML += mistakesTable; // Append table to results
+}
+
 function showTranslation() {
-    const translation = translations[words[currentWordIndex]];
-    if (translation) {
-        document.getElementById('translation').textContent = translation;
-        document.getElementById('translation').style.display = 'block';
-    }
+    const translation = translations[selectedWord];
+    document.getElementById('translation').textContent = 'Translation: ' + translation;
+    document.getElementById('translation').style.display = 'block';
 }
 
 function showDefinition() {
-    const definition = definitions[words[currentWordIndex]];
-    if (definition) {
-        document.getElementById('definition').textContent = definition;
-        document.getElementById('definition').style.display = 'block';
-    }
+    // For simplicity, using translations as definitions
+    const definition = definitions[selectedWord];
+    document.getElementById('definition').textContent = 'Definition: ' + definition;
+    document.getElementById('definition').style.display = 'block';
 }
