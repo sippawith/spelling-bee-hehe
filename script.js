@@ -210,4 +210,50 @@ function checkWord() {
             document.getElementById('wordInput').style.display = 'none';
             document.getElementById('nextWordButton').style.display = 'none';
         }
+    }
+}
         
+function nextWord() {
+    currentWordIndex = Math.floor(Math.random() * words.length);
+    document.getElementById('hiddenText').textContent = 'Hidden'; // Hide the word
+    document.getElementById('wordInput').value = ''; // Clear the input field
+    document.getElementById('nextWordButton').style.display = 'none';
+    document.getElementById('translation').style.display = 'none';
+    document.getElementById('definition').style.display = 'none';
+    document.getElementById('result').textContent = '';
+    speakWord(); // Optionally, speak the word
+}
+
+function giveUp() {
+    const correctWord = words[currentWordIndex];
+    document.getElementById('result').textContent = 'The correct word was: ' + correctWord;
+    document.getElementById('result').style.color = 'red';
+    hearts--;
+    document.getElementById('hearts').textContent = 'Hearts: ' + '❤️'.repeat(hearts);
+    if (hearts <= 0) {
+        document.getElementById('result').textContent = 'Game Over! Final Score: ' + score;
+        document.getElementById('result').style.color = 'red';
+        document.getElementById('hiddenText').style.display = 'none';
+        document.getElementById('hearWordButton').style.display = 'none';
+        document.getElementById('wordInput').style.display = 'none';
+        document.getElementById('nextWordButton').style.display = 'none';
+    } else {
+        nextWord(); // Move to next word after giving up
+    }
+}
+
+function showTranslation() {
+    const translation = translations[words[currentWordIndex]];
+    if (translation) {
+        document.getElementById('translation').textContent = translation;
+        document.getElementById('translation').style.display = 'block';
+    }
+}
+
+function showDefinition() {
+    const definition = definitions[words[currentWordIndex]];
+    if (definition) {
+        document.getElementById('definition').textContent = definition;
+        document.getElementById('definition').style.display = 'block';
+    }
+}
