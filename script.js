@@ -257,14 +257,14 @@ function displayMistakes() {
 }
 
 function showTranslation() {
-    const translation = translations[selectedWord];
-    document.getElementById('translation').textContent = 'Translation: ' + translation;
-    document.getElementById('translation').style.display = 'block';
+    const translationElement = document.getElementById('translation');
+    const currentWord = words[currentWordIndex];
+    translationElement.textContent = translations[currentWord] || 'No translation available';
+    translationElement.style.display = 'block';
 }
-
 function showDefinition() {
-    // For simplicity, using translations as definitions
-    const definition = definitions[selectedWord];
-    document.getElementById('definition').textContent = 'Definition: ' + definition;
-    document.getElementById('definition').style.display = 'block';
+    const definitionElement = document.getElementById('definition');
+    const currentWord = words[currentWordIndex];
+    definitionElement.textContent = definitions[currentWord] || 'No definition available';
+    definitionElement.style.display = 'block';
 }
